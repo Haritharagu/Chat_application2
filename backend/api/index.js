@@ -1,21 +1,12 @@
 const express = require('express');
-const http = require('http');
 const { Server } = require('socket.io');
 const cors = require('cors');
-const db = require('./db');
+const db = require('../db');
 require('dotenv').config();
 
 const app = express();
 app.use(cors());
 app.use(express.json());
-
-const server = http.createServer(app);
-const io = new Server(server, {
-    cors: {
-        origin: "*", // Temporarily allow all for debugging
-        methods: ["GET", "POST"]
-    }
-});
 
 // --- In-Memory Fallback (for when DB is unavailable) ---
 let memoryMessages = [];
@@ -91,7 +82,8 @@ app.delete('/api/messages/:id', async (req, res) => {
     }
 });
 
-// --- Socket.IO Logic ---
+// Socket.IO setup for Vercel
+const io = new Server();
 
 io.on('connection', (socket) => {
     console.log('A user connected:', socket.id);
@@ -148,8 +140,4 @@ io.on('connection', (socket) => {
     });
 });
 
-const PORT = process.env.PORT || 5000;
-server.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
-    console.log('--- READY: Backend is operational (using In-Memory fallback if DB is down) ---');
-});
+module.exports = { app, io };

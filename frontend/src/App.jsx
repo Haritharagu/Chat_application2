@@ -22,7 +22,13 @@ function App() {
         socket.on('newMessage', (message) => {
             setMessages((prevMessages) => [...prevMessages, message]);
         });
-        return () => socket.off('newMessage');
+        socket.on('messageDeleted', ({ deletedId }) => {
+            setMessages((prevMessages) => prevMessages.filter(msg => msg.id != deletedId));
+        });
+        return () => {
+            socket.off('newMessage');
+            socket.off('messageDeleted');
+        };
     }, [socket]);
 
     const fetchHistory = async () => {
@@ -51,6 +57,12 @@ function App() {
         }
     };
 
+    const deleteMessage = (messageId) => {
+        if (socket) {
+            socket.emit('deleteMessage', { id: messageId });
+        }
+    };
+
     return (
         <div className="app">
             {!user ? (
@@ -60,6 +72,7 @@ function App() {
                     user={user}
                     messages={messages}
                     onSendMessage={sendMessage}
+                    onDeleteMessage={deleteMessage}
                 />
             )}
         </div>
