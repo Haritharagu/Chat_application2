@@ -4,7 +4,7 @@ import Login from './components/Login';
 import ChatRoom from './components/ChatRoom';
 import './index.css';
 
-const SOCKET_SERVER_URL = 'http://localhost:5000';
+const SOCKET_SERVER_URL = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000';
 
 function App() {
     const [socket, setSocket] = useState(null);
