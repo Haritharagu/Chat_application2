@@ -1,24 +1,6 @@
 {
     "version": 2,
-    "rewrites": [
-        {
-            "source": "/api/(.*)",
-            "destination": "https://YOUR_BACKEND_URL/api/$1"
-        },
-        {
-            "source": "/socket.io/(.*)",
-            "destination": "https://YOUR_BACKEND_URL/socket.io/$1"
-        },
-        {
-            "source": "/(.*)",
-            "destination": "/$1"
-        }
-    ],
-    "redirects": [
-        {
-            "source": "/",
-            "destination": "/index.html",
-            "permanent": false
-        }
-    ]
+    "buildCommand": "cd frontend && npm install && npm run build",
+    "outputDirectory": "frontend/dist",
+    "framework": "vite"
 }
