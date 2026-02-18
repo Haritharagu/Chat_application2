@@ -22,6 +22,10 @@ let memoryMessages = [];
 
 // --- API Routes ---
 
+app.get('/', (req, res) => {
+    res.send('Nova Chat Backend is Running! 🚀');
+});
+
 // Fetch last 50 messages for history
 app.get('/api/messages', async (req, res) => {
     try {
